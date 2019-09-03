@@ -8,9 +8,12 @@ let fakeDataBase = [
 
 
 let order = true;
+document.getElementById("orderButton").addEventListener("click",changeOrder);
 
 function changeOrder(){
     order =!order;
+   
+    renderFakeData();
 }
 
 renderFakeData();
@@ -19,13 +22,14 @@ renderFakeData();
 function renderFakeData(){
 
     //skapa html från vår fakedatabase
-    let htmlOutput = fakeDataBase.map(function(taskObject){
+    let htmlOutput = fakeDataBase.map(function(taskObject, index){
 
+        console.log(index);
         return `
             <div>
-                <h1>${taskObject.task}</h1>
-                <button>Delete</button>
-            
+                <h1 id="${index}">${taskObject.task}  <sub>${taskObject.ready}</sub></h1>
+                <button id = "${index}"     onclick ="deleteTask(${index})">Delete</button>
+                <button onclick ="doneTask(${index})">DONE</button>
             </div>
         `;
 
@@ -33,7 +37,7 @@ function renderFakeData(){
 
     if(order)
     {
-    document.getElementById("taskList").innerHTML = htmlOutput.join("");
+        document.getElementById("taskList").innerHTML = htmlOutput.join("");
     }
     else
     {
@@ -54,7 +58,7 @@ function addTask(event){
     //skapa ett task objekt
     if(inputText.trim()!="")
     {
-    let taskObject = {task:inputText, ready:false}
+    let taskObject = {id:Date.now(), task:inputText, ready:false}
     //spara i fakedatabase
     fakeDataBase.push(taskObject);
     //rendera på nytt
@@ -63,4 +67,23 @@ function addTask(event){
     document.getElementById("taskId").value = "";
     document.getElementById("taskId").focus();
 
+}
+
+function _id(id){
+
+    return document.getElementById(id);
+
+}
+
+function deleteTask(index){
+
+    fakeDataBase.splice(index,1);
+    renderFakeData();
+
+}
+function doneTask(index){
+
+    let taskObject = fakeDataBase[index];
+    taskObject.ready =! taskObject.ready;
+    renderFakeData();
 }
