@@ -1,10 +1,12 @@
-let fakeDataBase = [
+let fakeDataBase;
 
-    {id:1, task:"Gå och handla", ready: false},
-    {id:2, task:"Gå och sporta", ready: false},
-    {id:3, task:"Gå och håll någon i handen", ready: false}
-
-];
+if(localStorage.getItem("todo2019")) 
+ {
+    fakeDataBase = JSON.parse(localStorage.getItem("todo2019")); 
+ }
+else{
+    fakeDataBase = [];
+}
 
 
 let order = true;
@@ -63,11 +65,22 @@ function addTask(event){
     fakeDataBase.push(taskObject);
     //rendera på nytt
     renderFakeData();
+
+    //spara lokalt
+    savelocal();
     }
     document.getElementById("taskId").value = "";
     document.getElementById("taskId").focus();
 
 }
+
+
+function savelocal(){
+
+    localStorage.setItem("todo2019", JSON.stringify(fakeDataBase));
+    
+}
+
 
 function _id(id){
 
@@ -86,4 +99,5 @@ function doneTask(index){
     let taskObject = fakeDataBase[index];
     taskObject.ready =! taskObject.ready;
     renderFakeData();
+    savelocal();
 }
